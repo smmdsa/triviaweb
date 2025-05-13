@@ -1,0 +1,107 @@
+{
+  "meta": {
+    "generatedAt": "2025-05-13T21:13:16.016Z",
+    "tasksAnalyzed": 12,
+    "thresholdScore": 5,
+    "projectName": "Taskmaster",
+    "usedResearch": true
+  },
+  "complexityAnalysis": [
+    {
+      "taskId": 1,
+      "taskTitle": "Setup Monorepo and Infrastructure",
+      "complexityScore": 7,
+      "recommendedSubtasks": 5,
+      "expansionPrompt": "Break down the monorepo setup task into subtasks covering repository initialization, configuration of build tools, environment setup, CI/CD pipeline implementation, and deployment configuration with detailed steps for each.",
+      "reasoning": "This task involves multiple technical components including Next.js setup, monorepo configuration with Turborepo, code quality tools, Vercel deployment, environment configuration, and CI/CD pipeline setup. Each component requires specific technical knowledge and configuration steps."
+    },
+    {
+      "taskId": 2,
+      "taskTitle": "Database and Authentication Setup",
+      "complexityScore": 8,
+      "recommendedSubtasks": 6,
+      "expansionPrompt": "Divide the database and authentication setup into subtasks covering database provisioning, Prisma ORM configuration, schema design with tenant isolation, Auth0 integration, RBAC implementation, and security middleware with detailed implementation steps.",
+      "reasoning": "This task combines database setup with authentication, requiring deep technical knowledge in both areas. It includes Vercel Postgres provisioning, Prisma ORM configuration, multi-tenant schema design, Auth0 integration, RBAC implementation, and row-level security - all of which are complex components with potential security implications."
+    },
+    {
+      "taskId": 3,
+      "taskTitle": "API Layer Implementation",
+      "complexityScore": 8,
+      "recommendedSubtasks": 5,
+      "expansionPrompt": "Expand the API layer implementation into subtasks covering GraphQL server setup, tRPC configuration, REST endpoint creation, security middleware implementation, and API documentation with detailed code examples for each component.",
+      "reasoning": "This task requires implementing multiple API paradigms (GraphQL, tRPC, and REST) with proper type safety, authentication, rate limiting, and security configurations. Each API technology requires specific expertise and careful integration with the authentication system."
+    },
+    {
+      "taskId": 4,
+      "taskTitle": "Realtime Infrastructure with Upstash Redis",
+      "complexityScore": 7,
+      "recommendedSubtasks": 4,
+      "expansionPrompt": "Break down the realtime infrastructure task into subtasks covering Redis provisioning and configuration, WebSocket server implementation, Pub/Sub system development, and leaderboard functionality with detailed implementation steps for each component.",
+      "reasoning": "This task involves setting up realtime infrastructure using Redis and WebSockets, which requires knowledge of distributed systems concepts. It includes Redis configuration, WebSocket implementation with Edge Functions, Pub/Sub patterns, and leaderboard functionality using Redis Sorted Sets."
+    },
+    {
+      "taskId": 5,
+      "taskTitle": "Campaign and Question Bank CRUD",
+      "complexityScore": 6,
+      "recommendedSubtasks": 4,
+      "expansionPrompt": "Divide the Campaign and Question Bank CRUD task into subtasks covering data model implementation, API endpoint creation, UI component development, and CSV import/export functionality with detailed implementation steps for each feature.",
+      "reasoning": "This task involves implementing standard CRUD operations with some additional complexity from CSV import/export functionality, tagging systems, and full-text search. While it's a substantial task, it follows common patterns for data management functionality."
+    },
+    {
+      "taskId": 6,
+      "taskTitle": "Wizard Constructor and Theme Engine",
+      "complexityScore": 7,
+      "recommendedSubtasks": 5,
+      "expansionPrompt": "Break down the wizard constructor and theme engine task into subtasks covering multi-step wizard UI implementation, autosave functionality, theme engine development, theme customization interface, and drag-and-drop functionality with detailed implementation steps for each component.",
+      "reasoning": "This task combines UI complexity with state management challenges. It includes a multi-step wizard with autosave functionality, a theming engine with Tailwind CSS, live preview capabilities, responsive design considerations, and drag-and-drop functionality - all requiring careful implementation."
+    },
+    {
+      "taskId": 7,
+      "taskTitle": "Lead Form Builder and Validation",
+      "complexityScore": 8,
+      "recommendedSubtasks": 5,
+      "expansionPrompt": "Expand the lead form builder task into subtasks covering drag-and-drop UI implementation, form field type development, conditional logic system, validation rule engine, and form submission handling with detailed implementation steps for each component.",
+      "reasoning": "This task involves complex UI interactions with drag-and-drop functionality, multiple field types, conditional logic for form fields, validation rules, and webhook integrations. The combination of these features makes this a highly complex task requiring careful architecture."
+    },
+    {
+      "taskId": 8,
+      "taskTitle": "Embeddable Widget and QR Code Generation",
+      "complexityScore": 7,
+      "recommendedSubtasks": 4,
+      "expansionPrompt": "Divide the embeddable widget and QR code task into subtasks covering JavaScript SDK development, iframe embedding implementation, QR code generation service, and distribution channel setup with detailed implementation steps for each component.",
+      "reasoning": "This task requires creating a JavaScript SDK for third-party embedding, implementing iframe functionality, building subdomain hosting, QR code generation, and edge hosting configuration. These components involve cross-origin communication and security considerations."
+    },
+    {
+      "taskId": 9,
+      "taskTitle": "Game Runtime and Scoring System",
+      "complexityScore": 9,
+      "recommendedSubtasks": 6,
+      "expansionPrompt": "Break down the game runtime and scoring system task into subtasks covering player UI implementation, timer functionality, scoring algorithm development, WebSocket integration, leaderboard system, and analytics tracking with detailed implementation steps for each component.",
+      "reasoning": "This task involves complex realtime functionality with WebSockets, timer synchronization, scoring calculations, leaderboard updates using Redis, event tracking, and gamification elements. The realtime nature and coordination of multiple systems make this one of the most complex tasks."
+    },
+    {
+      "taskId": 10,
+      "taskTitle": "Analytics Dashboard and Reporting",
+      "complexityScore": 8,
+      "recommendedSubtasks": 5,
+      "expansionPrompt": "Expand the analytics dashboard task into subtasks covering data model design, aggregation query implementation, visualization component development, export functionality, and automated reporting with detailed implementation steps for each feature.",
+      "reasoning": "This task requires implementing complex database queries, materialized views, data visualization with Recharts, lead data analysis, conversion funnel tracking, email report generation, and export functionality. The data processing and visualization aspects add significant complexity."
+    },
+    {
+      "taskId": 11,
+      "taskTitle": "Billing and Subscription Management",
+      "complexityScore": 8,
+      "recommendedSubtasks": 5,
+      "expansionPrompt": "Divide the billing and subscription management task into subtasks covering Stripe integration, subscription plan implementation, checkout flow development, subscription management UI, and webhook handler implementation with detailed steps for each component.",
+      "reasoning": "This task involves integrating with Stripe for payments, implementing subscription plans, building checkout flows, creating subscription management UI, enforcing usage limits, generating invoices, and handling webhook events. Financial systems require careful implementation and testing."
+    },
+    {
+      "taskId": 12,
+      "taskTitle": "Role-Based Access Control and Multi-tenancy",
+      "complexityScore": 9,
+      "recommendedSubtasks": 6,
+      "expansionPrompt": "Break down the RBAC and multi-tenancy task into subtasks covering permission system design, user management UI, row-level security implementation, tenant isolation middleware, invite system development, and audit logging with detailed implementation steps for each component.",
+      "reasoning": "This task involves implementing security-critical features including role-based access control, row-level security for multi-tenancy, tenant isolation in API routes, permission checks, user invitation system, and audit logging. The security implications and complexity of proper isolation make this one of the most complex tasks."
+    }
+  ]
+}

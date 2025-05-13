@@ -1,8 +1,8 @@
-<context>
+\<FORMATO\_PRD> <context>
 
 # Overview
 
-La plataforma SaaS de Trivia permite a equipos de marketing y agencias crear campañas de trivia gamificadas para captar leads e impulsar brand awareness, sin necesidad de código. Con una suscripción asequible, cada cliente obtiene su propio microsite o widget totalmente personalizable que combina entretenimiento con formularios de captura de datos y analíticas avanzadas.
+La plataforma SaaS de Trivia permite a equipos de marketing y agencias crear campañas de trivia gamificadas para captar leads e impulsar brand awareness, sin necesidad de código. Con una suscripción asequible, cada cliente obtiene su propio microsite o widget totalmente personalizable que combina entretenimiento con formularios de captura de datos y analíticas avanzadas.
 
 **Problema**: la generación de leads online suele ser aburrida (pop‑ups, formularios estáticos). Los usuarios abandonan antes de completar.
 **Solución**: trivias interactivas, de marca, que convierten mejor gracias a la mecánica lúdica.
@@ -17,8 +17,8 @@ La plataforma SaaS de Trivia permite a equipos de marketing y agencias crear cam
 | Question Bank               | Repositorio reutilizable + import CSV         | Ahorra tiempo, consistencia        | CRUD + etiquetas, búsqueda full‑text               |
 | Lead Forms                  | Captura datos con lógica condicional          | Convierte jugadores en prospectos  | Constructor drag‑and‑drop, validación y webhooks   |
 | Embeddable Widget & QR      | Publica en subdominio, iframe o QR            | Flexibilidad de distribución       | JS SDK + edge hosting                              |
-| Real‑time Scoring & Ranking | Puntúa y muestra leaderboard                  | Aumenta engagement y share         | WebSocket + Redis Pub/Sub                          |
-| Analytics Dashboard         | Métricas de participación y CPL               | Demuestra ROI                      | ClickHouse + Recharts UI                           |
+| Real‑time Scoring & Ranking | Puntúa y muestra leaderboard                  | Aumenta engagement y share         | WebSocket (Upstash Redis)                          |
+| Analytics Dashboard         | Métricas de participación y CPL               | Demuestra ROI                      | Postgres + Prisma + Recharts UI                    |
 | Roles & Multi‑tenant        | Owner, Editor, Viewer; aislamiento            | Seguridad y colaboración           | RBAC + row‑level security                          |
 
 # User Experience
@@ -29,7 +29,7 @@ La plataforma SaaS de Trivia permite a equipos de marketing y agencias crear cam
 
 **Flujos Clave**
 
-1. *Onboarding*: signup → elige plantilla → importa preguntas → aplica branding → configura formulario → public & share.
+1. *Onboarding*: signup → elige plantilla → importa preguntas → aplica branding → configura formulario → publish & share.
 2. *Jugador*: accede por URL/QR → responde preguntas → ve puntuación → deja datos → comparte.
 
 **UI/UX Consideraciones**
@@ -43,73 +43,67 @@ La plataforma SaaS de Trivia permite a equipos de marketing y agencias crear cam
 
 <PRD>
 # Technical Architecture  
-**Sistema**  
-- Frontend *Next.js 15* (React 18 + TypeScript) – SSR + static export.  
-- API Gateway / BFF *NestJS* (Node 20) – GraphQL + REST, AuthN / AuthZ.  
-- Microservicios: Trivia, Leads, Media, Analytics (NestJS).  
-- Event Bus: NATS JetStream para CQRS + Event Sourcing.  
-- BD principal: PostgreSQL 15 (row‑level security).  
-- Almacén de eventos/analytics: ClickHouse.  
-- Cache & Pub/Sub: Redis.  
-- Storage assets: Cloudflare Images/R2.  
-- Auth: Auth0 (OIDC, RBAC).  
-- Infra: Kubernetes (GKE) + Terraform IaC, CDN global, Ingress TLS 1.3.  
+**Sistema (MVP simplificado)**  
+- **Monorepo Next.js 15 (React 18 + TypeScript)** sobre **Vercel**; API Routes/Edge Functions hacen de BFF.  
+- **Database**: **Vercel Postgres** (Neon) → acceso vía Prisma, row‑level security por tenant.  
+- **Realtime**: **Upstash Redis** (Pub/Sub) para ranking en vivo y websockets (ws://edge).  
+- **Auth**: **Auth0** (OIDC, RBAC) con callbacks alojados en Vercel.  
+- **Media & Assets**: **Cloudflare Images** (o Vercel Blob cuando esté GA).  
+- **Email/Notifications**: Resend API.  
+- **Payments**: Stripe Billing.  
+- **CI/CD**: GitHub → Vercel Preview/Prod; tests en GitHub Actions.  
+- **Infra**: sin Terraform/K8s; variables y ambientes gestionados en el dashboard de Vercel.  
 
-**Data Models** (clave): Tenant, User, Campaign, Question, Lead, Theme, Event.
+**Data Models**: Tenant, User, Campaign, Question, Lead, Theme, Event.
 
 **APIs & Integraciones**
 
-* GraphQL `/graphql` para UI; REST `/v1/*` públicas.
-* Webhooks (Zapier/Make).
-* Stripe Billing API.
-* Unsplash API (media).
+* GraphQL `/api/graphql` (Yoga) + REST `/api/*` (Next.js routes).
+* Webhooks (Zapier/Make) via `/api/webhooks/*`.
+* Unsplash API para imágenes.
 
 # Development Roadmap
 
-| Fase                                  | Alcance detallado                                                                                            |
-| ------------------------------------- | ------------------------------------------------------------------------------------------------------------ |
-| **Fase 0 – Fundaciones**              | Monorepo, CI/CD, Auth, esqueleto Next.js + diseño sistemas base, infraestructura base (GKE, VPC, DB, Redis). |
-| **Fase 1 – Core CRUD**                | Campaign + Question Bank CRUD full‑stack, importar CSV, RLS Postgres, tests unitarios.                       |
-| **Fase 2 – Wizard Constructor**       | UI wizard con autosave, IA sugerencias, Thema engine básico.                                                 |
-| **Fase 3 – Lead Capture & Widget**    | Form Builder, validación, JS SDK embeddable, QR generator, Webhooks v1.                                      |
-| **Fase 4 – Game Runtime**             | Player runtime, tiempo límite, scoring, WebSocket lobby, Event Sourcing.                                     |
-| **Fase 5 – Analytics**                | Ingesta eventos en ClickHouse, dashboard KPI, export CSV, email reports.                                     |
-| **Fase 6 – Billing & Roles**          | Stripe subscriptions, roles UI, tenant isolation hardening.                                                  |
-| **Fase 7 – Observability & Security** | OpenTelemetry traces, Prometheus metrics, Snyk gate, k6 load tests.                                          |
-| **Fase 8 – Beta & Launch**            | QA, UX polish, docs, staged rollout, feedback loop.                                                          |
-| **Post‑MVP**                          | AI Design Copilot, Live Battle Mode, Mobile SDK, AR Trivia.                                                  |
+| Fase                               | Alcance detallado                                                                                                                               |
+| ---------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Fase 0 – Setup & Deploy Base**   | Crear monorepo, conectar repo a Vercel, configurar entornos (Preview, Production), provisionar Vercel Postgres y Upstash Redis, integrar Auth0. |
+| **Fase 1 – Core CRUD**             | Campaign & Question Bank CRUD (Prisma + tRPC/GraphQL), import CSV, tests unitarios.                                                             |
+| **Fase 2 – Wizard Constructor**    | UI wizard con autosave (localStorage + API), motor de temas Tailwind.                                                                           |
+| **Fase 3 – Lead Capture & Widget** | Form Builder drag‑and‑drop, validaciones, endpoint de leads, JS SDK embeddable, generación QR.                                                  |
+| **Fase 4 – Game Runtime**          | Player runtime (React), timer, scoring, realtime ranking vía Upstash, persistencia en events table.                                             |
+| **Fase 5 – Analytics Dashboard**   | Consultas agregadas en Postgres (materialized views) + Recharts, export CSV, email semanal Resend.                                              |
+| **Fase 6 – Billing & Roles**       | Stripe subscriptions, RBAC UI, enforcement RLS.                                                                                                 |
+| **Fase 7 – QA & Launch Beta**      | Cypress e2e, Lighthouse audits, hardening headers CSP, staged rollout.                                                                          |
+| **Post‑MVP**                       | AI Design Copilot, Live Battle Mode, Mobile SDK, AR Trivia.                                                                                     |
 
 # Logical Dependency Chain
 
-1. **Infra & Auth** → base para todo.
-2. **Data Layer + CRUD** → soporta wizard y runtime.
-3. **Wizard + Branding Engine** → requiere CRUD listo.
-4. **Lead Forms & Widget** → depende de wizard para publicar.
-5. **Game Runtime** → necesita campaigns y widget para ser visible.
-6. **Analytics** → consume eventos del runtime (requiere 4‑5).
-7. **Billing/Roles** → puede ir en paralelo pero debe cerrar antes de beta.
-8. **Observability/Security Hardening** → continua durante toda la cadena, formalizado en fase 7.
-
-Cada fase produce un deliverable usable para demos internas; el primer “visible” externo es al completar **Fase 3** (widget jugable + captura leads).
+1. **Setup Vercel + Auth0 + Database** (F0).
+2. **Data Models & CRUD** (F1).
+3. **Wizard / Branding** (F2) depende de CRUD.
+4. **Lead Forms & Widget** (F3) depende de Wizard.
+5. **Runtime** (F4) usa campañas y widget.
+6. **Analytics** (F5) usa eventos del runtime.
+7. **Billing/Roles** (F6) antes de abrir beta.
+8. **QA & Launch** (F7) cierre MVP.
 
 # Risks and Mitigations
 
-| Riesgo                     | Impacto                        | Mitigación                                                             |
-| -------------------------- | ------------------------------ | ---------------------------------------------------------------------- |
-| Sobrecosto de APIs IA      | Costes variables impredecibles | Cache local, límites de uso, modelo propio ligero                      |
-| Escalado multi‑tenant      | Contención DB y ruidoso‑vecino | Sharding por tenant > 1 M MAU, lectura read‑replicas                   |
-| Integridad concursos       | Normativas locales             | Sistema de flags por país + asesoría legal                             |
-| Scope creep MVP            | Retraso salida                 | Comité semanal de cambios + definición “Expo Hall Demo” como hito fijo |
-| Latencia WebSockets global | UX mala en otras regiones      | PoP WebSockets via Fly.io o Cloudflare Workers                         |
+| Riesgo                          | Impacto                 | Mitigación                                              |
+| ------------------------------- | ----------------------- | ------------------------------------------------------- |
+| Límite cold‑start Functions     | Latencia primera visita | Edge Functions cuando sea posible, warming ping         |
+| Cuotas gratuitas Upstash/DB     | Downtime si se excede   | Plan pago early, alertas de cuota                       |
+| Multitenancy en Vercel Postgres | Contención              | Connection pooling + row‑level security, shards futuros |
+| Scope creep MVP                 | Retraso                 | Definición estricta de fases con Go/No‑Go semanal       |
 
 # Appendix
 
-* **Patrones Diseño**: Clean Arch, DDD, CQRS/Event Sourcing, Module Federation.
-* **Esquema CI/CD**: GitHub Actions → Build, Test, Scan, ArgoCD → GKE dev/stage/prod.
-* **Esquema Seguridad**: JWT 15 min + refresh, CSP, rate‑limit 100 r/m/IP, reCAPTCHA.
-* **Investigación Competidores**: Kahoot!, Outgrow, Typeform Quiz, Gamify.
-* **Especificaciones Técnicas Detalladas**: enlaces a Swagger/OpenAPI, diagrama ER completo, Terraform modules.
+* **Patrones Diseño**: Clean Arch modular dentro de monorepo, DDD light, tRPC/GraphQL.
+* **CI Pipeline**: GitHub → tests → Vercel preview → review → merge → prod.
+* **Seguridad**: JWT 15 min + refresh, rate‑limit middleware 100 r/m/IP, CSP strict‑dynamic, reCAPTCHA.
+* **Competidores**: Kahoot!, Outgrow, Typeform Quiz, Gamify.
+* **Especificaciones**: Esquema GraphQL/tRPC, Migrations SQL, diagrama ER, diagramas de secuencia clave.
 
   </PRD>
 
-
+\</FORMATO\_PRD>

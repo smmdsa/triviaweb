@@ -12,11 +12,21 @@
     "dev": "turbo run dev --parallel",
     "build": "turbo run build",
     "lint": "turbo run lint",
-    "test": "turbo run test"
+    "test": "turbo run test",
+    "db:migrate": "prisma migrate dev --schema packages/api/prisma/schema.prisma",
+    "db:generate": "prisma generate --schema packages/api/prisma/schema.prisma",
+    "db:seed": "ts-node --transpile-only packages/api/prisma/seed.ts"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "turbo": "latest"
+    "turbo": "latest",
+    "prisma": "^5.12.1",
+    "typescript": "^5.5.0",
+    "ts-node": "^10.9.2",
+    "@types/node": "^20.3.0"
+  },
+  "dependencies": {
+    "@prisma/client": "^5.12.1"
   }
 }

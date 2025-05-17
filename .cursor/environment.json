@@ -1,0 +1,6 @@
+{
+  "snapshot": "snapshot-20250517-c86654b2-2cd0-45ff-8801-0e20a26e32f4",
+  "install": "rm -rf ./node_module && npm install",
+  "start": "npm run dev ",
+  "terminals": []
+}

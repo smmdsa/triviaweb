@@ -1,1 +1,49 @@
 /package-lock.json
+
+# Node dependencies
+node_modules/
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Optional npm cache directory
+.npm
+
+# Optional eslint cache
+.eslintcache
+
+# dotenv environment variables file
+.env
+.env.*
+
+# macOS system files
+.DS_Store
+
+# TypeScript cache
+*.tsbuildinfo
+
+# Build output
+/dist/
+
+# Next.js build output
+.next/
+
+# SvelteKit build
+.build/
+
+# VSCode settings
+.vscode/
+
+# cypress
+cypress/videos/
+
+# pnpm store
+dist
+.pnpm-store/
+
+# Turbo
+.turbo/

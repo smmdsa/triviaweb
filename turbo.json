@@ -6,9 +6,14 @@
     },
     "dev": {
       "cache": false,
-      "persistent": true
+      "persistent": true,
+      "dependsOn": ["^dev"]
     },
-    "lint": {},
-    "test": {}
+    "lint": {
+      "outputs": []
+    },
+    "test": {
+      "outputs": []
+    }
   }
 }

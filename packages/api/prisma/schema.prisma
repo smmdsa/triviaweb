@@ -1,0 +1,79 @@
+// Prisma schema v0.1 – Agent 2 (DB1)
+// Datasource & generator
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// Multi-tenant: each record belongs to a Company via companyId
+
+model Company {
+  id        String   @id @default(cuid())
+  name      String
+  users     User[]
+  trivias   Trivia[]
+  leads     Lead[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model User {
+  id          String   @id @default(cuid())
+  email       String   @unique
+  name        String?
+  company     Company  @relation(fields: [companyId], references: [id])
+  companyId   String
+  trivias     Trivia[] @relation("UserTrivias")
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Trivia {
+  id          String     @id @default(cuid())
+  title       String
+  status      String     @default("draft")
+  company     Company    @relation(fields: [companyId], references: [id])
+  companyId   String
+  creator     User?      @relation("UserTrivias", fields: [creatorId], references: [id])
+  creatorId   String?
+  questions   Question[]
+  leads       Lead[]
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+}
+
+model Question {
+  id        String   @id @default(cuid())
+  trivia    Trivia   @relation(fields: [triviaId], references: [id])
+  triviaId  String
+  text      String
+  options   String[] // JSON array of options (A, B, C, D)
+  answer    String   // correct answer key
+  order     Int
+  responses Response[]
+}
+
+model Lead {
+  id         String     @id @default(cuid())
+  company    Company    @relation(fields: [companyId], references: [id])
+  companyId  String
+  trivia     Trivia     @relation(fields: [triviaId], references: [id])
+  triviaId   String
+  responses  Response[]
+  createdAt  DateTime   @default(now())
+}
+
+model Response {
+  id        String   @id @default(cuid())
+  lead      Lead     @relation(fields: [leadId], references: [id])
+  leadId    String
+  question  Question @relation(fields: [questionId], references: [id])
+  questionId String
+  answer    String
+  correct   Boolean
+}

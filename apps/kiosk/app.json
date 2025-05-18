@@ -1,0 +1,18 @@
+{
+  "expo": {
+    "name": "Trivia Kiosk",
+    "slug": "trivia-kiosk",
+    "platforms": ["ios", "android", "web"],
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "startUrl": ".",
+    "icon": "./assets/icon.png",
+    "web": {
+      "bundler": "metro",
+      "favicon": "./assets/icon.png"
+    },
+    "extra": {
+      "API_URL": "/api"
+    }
+  }
+}

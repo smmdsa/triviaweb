@@ -1,0 +1,16 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "jsx": "preserve",
+    "baseUrl": ".",
+    "paths": {
+      "@/components/*": ["components/*"],
+      "@/lib/*": ["lib/*"]
+    },
+    "rootDir": "src",
+    "outDir": "dist",
+    "types": ["next", "react"]
+  },
+  "include": ["next-env.d.ts", "src/**/*", "**/*.ts", "**/*.tsx"],
+  "exclude": ["node_modules"]
+}

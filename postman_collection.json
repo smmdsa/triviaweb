@@ -1,0 +1,27 @@
+{
+  "info": {
+    "_postman_id": "00000000-0000-0000-0000-000000000001",
+    "name": "Trivia API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "List Trivias",
+      "request": {
+        "method": "GET",
+        "url": "{{base_url}}/api/trivias"
+      }
+    },
+    {
+      "name": "Create Trivia",
+      "request": {
+        "method": "POST",
+        "url": "{{base_url}}/api/trivias",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"title\": \"General Knowledge\"\n}"
+        }
+      }
+    }
+  ]
+}

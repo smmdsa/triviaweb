@@ -21,7 +21,7 @@
     "@vitejs/plugin-react": "^4.2.0",
     "@types/react": "^18.2.70",
     "preact": "^10.23.2",
-    "@preact/signals": "^1.2.2",
+    "@preact/signals": "^2.0.5",
     "@preact/preset-vite": "^2.6.4"
   },
   "peerDependencies": {

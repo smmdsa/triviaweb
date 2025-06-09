@@ -29,6 +29,6 @@
     "@vitest/coverage-c8": "^0.32.0"
   },
   "dependencies": {
-    "@prisma/client": "^5.12.1"
+    "@prisma/client": "^6.9.0"
   }
 }

@@ -23,6 +23,6 @@
     "@types/react": "^18.2.70",
     "@types/react-native": "^0.73.9",
     "typescript": "^5.5.0",
-    "eslint": "^8.56.0"
+    "eslint": "^9.30.0"
   }
 }

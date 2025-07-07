@@ -10,7 +10,7 @@
     "test": "vitest"
   },
   "dependencies": {
-    "express": "^4.19.2",
+    "express": "^5.1.0",
     "cors": "^2.8.5",
     "helmet": "^7.0.0",
     "express-rate-limit": "^7.0.2",
